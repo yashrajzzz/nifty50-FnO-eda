@@ -1,0 +1,24 @@
+# Data manipulation
+pandas
+numpy
+
+# Data visualization
+matplotlib
+seaborn
+plotly
+
+# Statistical analysis
+scipy
+statsmodels
+
+# Machine learning and preprocessing
+scikit-learn
+
+# Jupyter environment
+jupyter
+ipykernel
+notebook
+
+# File handling
+openpyxl
+pyarrow

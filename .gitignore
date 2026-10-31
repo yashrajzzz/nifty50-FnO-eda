@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE settings
+.vscode/
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+
+# Processed datasets (keep raw data)
+data/processed/*
+!data/processed/.gitkeep
+
+# Python packaging
+build/
+dist/
+*.egg-info/
