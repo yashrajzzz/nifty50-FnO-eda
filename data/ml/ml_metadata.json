@@ -1,0 +1,30 @@
+{
+    "project": "NIFTY 50 Futures and Options ML",
+    "notebook": "05_feature_engineering",
+    "prediction_objective": "Next-observation direction classification using derivatives-implied underlying proxy",
+    "target_column": "Target_Direction",
+    "target_mapping": {
+        "-1": "Down",
+        "0": "Sideways",
+        "1": "Up"
+    },
+    "sideways_threshold_percent": 0.1,
+    "feature_count": 43,
+    "feature_selection_fit_on": "training partition only",
+    "split_ratios": {
+        "training": 0.7,
+        "validation": 0.15,
+        "testing": 0.15
+    },
+    "training_start": "2021-01-01",
+    "training_end": "2025-10-14",
+    "validation_start": "2025-10-16",
+    "validation_end": "2026-04-06",
+    "testing_start": "2026-04-08",
+    "testing_end": "2026-09-24",
+    "underlying_source": "Daily median Underlying Value from supplied NIFTY futures contracts; CE then PE fallback where prior source is missing",
+    "underlying_source_limitation": "Derivatives-implied proxy, not an independent official NIFTY 50 spot close series; missing observations are not imputed",
+    "underlying_proxy_coverage_percent": 68.26,
+    "valid_target_observations": 775,
+    "total_market_dates": 1421
+}
