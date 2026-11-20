@@ -57,6 +57,14 @@ class Settings(BaseSettings):
         return self.PROJECT_ROOT / "data"
 
     @property
+    def RAW_DATA_DIR(self) -> Path:
+        return self.DATA_DIR / "raw"
+
+    @property
+    def PROCESSED_DATA_DIR(self) -> Path:
+        return self.DATA_DIR / "processed"
+
+    @property
     def DATA_ML_DIR(self) -> Path:
         return self.DATA_DIR / "ml"
 
