@@ -2,295 +2,265 @@
 ### An Exploratory Data Analysis (EDA) Project
 
 <p align="center">
-  <strong>Exploring the Indian derivatives market through data analysis, statistical insights, and machine learning.</strong>
+  <strong>Exploring the Indian derivatives market through exploratory data analysis, statistical modeling, machine learning, and an interactive financial analytics application.</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" />
-  <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white" />
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
+  <img src="https://img.shields.io/badge/Next.js%2014-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
   <img src="https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white" />
-  <img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" />
 </p>
 
 ---
 
 ## 📌 About
 
-This project focuses on the **exploratory data analysis of the NIFTY 50 Futures and Options market**, using historical contract-wise data obtained from the National Stock Exchange of India (NSE).
+This project presents an empirical **exploratory data analysis of the NIFTY 50 Futures and Options market**, utilizing historical contract-level data from the National Stock Exchange of India (NSE).
 
-It explores market behaviour across NIFTY 50 Index Futures, Call Options (CE), and Put Options (PE), with an emphasis on trading activity, price movements, volume, turnover, open interest, and statistical relationships.
+The study analyzes market behaviour across NIFTY 50 Index Futures, Call Options (CE), and Put Options (PE), examining trading volume, notional turnover, Open Interest dynamics, strike concentrations, Put-Call Ratios (PCR), and statistical relationships across varying market regimes from **January 2021 to September 2026** (September partial).
 
-The project extends beyond traditional EDA through feature engineering and an experimental machine-learning workflow for classifying the direction of the next observed trading session.
+Beyond traditional notebook-based research, the project includes:
+- A high-performance **FastAPI backend** exposing clean analytics, time-series, and ML inference endpoints.
+- A financial terminal-inspired **Next.js 14 web application** featuring dark and light modes, interactive Recharts visualizations, date-range filtering, and a live machine learning inference playground.
+
+---
 
 ## 🎯 Objectives
 
-- Understand and inspect historical NIFTY 50 derivatives data.
-- Clean and preprocess large datasets.
-- Perform exploratory data analysis and visualize market trends.
-- Compare Futures, Call Options, and Put Options.
-- Conduct comparative statistical analysis.
-- Engineer meaningful features from derivatives-market data.
-- Experiment with machine-learning models for next-session market-direction classification.
+- Clean, preprocess, and deduplicate 2.68 million+ historical NSE derivatives records.
+- Convert raw tick data into columnar, optimized Parquet datasets.
+- Conduct univariate and bivariate exploratory data analysis on price discovery and liquidity.
+- Compare trading distributions and correlations between Futures, Calls, and Puts.
+- Engineer 43 time-aware market features (momentum, volatility, PCR oscillators).
+- Formulate and benchmark an experimental 3-class market direction classification model.
+- Deliver an interactive, responsive analytics dashboard for researchers and analysts.
+
+---
 
 ## 📈 Project Highlights
 
-| Area | Highlights |
+| Dimension | Specification |
 |---|---|
-| Market coverage | NIFTY 50 Futures, CE and PE |
-| Study period | January 2021 – September 2026 |
-| Raw dataset | 2.68 million+ records |
-| Data processing | Cleaning, preprocessing and duplicate removal |
-| Analytics | Exploratory and comparative statistical analysis |
-| Feature engineering | Time-aware market features |
-| Machine learning | Three-class direction classification |
-| Selected model | Extra Trees Classifier |
+| **Market Coverage** | NIFTY 50 Futures, Call Options (CE), Put Options (PE) |
+| **Study Period** | January 2021 – September 2026 (September 2026 partial) |
+| **Raw Records** | 2,681,746 contract observations |
+| **Cleaned Records** | Futures: 4,294 · CE: 1,261,810 · PE: 1,300,689 |
+| **Common Sessions** | 1,421 simultaneously aligned trading days |
+| **ML Predictors** | 43 engineered features |
+| **Selected ML Model** | Extra Trees Classifier (120 trees, balanced subsample) |
+| **Recorded Metrics** | Test Accuracy: 38.46% · Test Macro F1: 0.3224 |
+| **Architecture** | FastAPI Backend + Next.js 14 App Router Frontend |
+
+---
 
 ## 📊 Dataset Overview
 
-The data was obtained from the NSE historical contract-wise price-volume reports.
+Data was collected from the NSE historical contract-wise price and volume reports ([NSE F&O Equity Security](https://www.nseindia.com/report-detail/fo_eq_security)).
 
-**Source:** [NSE – F&O Equity Security](https://www.nseindia.com/report-detail/fo_eq_security)
+### Raw vs. Deduplicated Records
 
-### Raw dataset statistics
+| Instrument | Raw Records | Post-Cleaning Records |
+|---|---:|---:|
+| NIFTY Futures | 4,348 | 4,294 |
+| NIFTY Call Options (CE) | 1,319,036 | 1,261,810 |
+| NIFTY Put Options (PE) | 1,358,362 | 1,300,689 |
+| **Total** | **2,681,746** | **2,566,793** |
 
-| Dataset | Records |
-|---|---:|
-| NIFTY Futures | 4,348 |
-| NIFTY Call Options (CE) | 1,319,036 |
-| NIFTY Put Options (PE) | 1,358,362 |
-| **Total** | **2,681,746** |
+> **Critical Data Limitation:** The `Underlying Value` field in the dataset is a derivatives-implied settlement proxy (~68.26% direct date coverage), **not** an independently verified official NIFTY 50 cash spot closing series.
 
-The study covers January 2021 to September 2026. September 2026 represents partial data rather than a complete calendar month.
+---
 
-> **Data consideration:** The available `Underlying Value` field is used as a derivatives-implied proxy in the machine-learning target construction. It is not an independently verified official NIFTY 50 spot closing-price series.
+## 🔬 Research Pipeline (Notebooks)
 
-## 🔬 Research Pipeline
+The research foundation is structured across six sequential Jupyter notebooks:
 
-The project is organized into six Jupyter notebooks, each representing a stage of the analytical workflow.
-
-| Notebook | Stage | Description |
+| # | Notebook | Focus |
 |---|---|---|
-| 01 | Data Understanding | Dataset inspection, schema analysis, data types and coverage |
-| 02 | Data Cleaning | Missing-value assessment, duplicate removal and preprocessing |
-| 03 | Exploratory Data Analysis | Market trends, distributions, trading activity and visualizations |
-| 04 | Statistical Analysis | Comparative analysis of Futures, CE and PE |
-| 05 | Feature Engineering | Feature construction, target generation and chronological dataset splitting |
-| 06 | Machine Learning | Model training, validation, tuning and final evaluation |
+| 01 | `01_data_understanding.ipynb` | Schema audit, missingness inspection, contract expirations, trading calendar validation. |
+| 02 | `02_data_cleaning_preprocessing.ipynb` | Deduplication, timestamp parsing, zero-volume handling, and export to Parquet. |
+| 03 | `03_exploratory_data_analysis.ipynb` | Volume/turnover trends, price distributions, and Put-Call Ratio (PCR) trajectory. |
+| 04 | `04_comparative_statistical_analysis.ipynb` | Descriptive statistics, quartiles, skewness, kurtosis, and Spearman rank correlations. |
+| 05 | `05_feature_engineering.ipynb` | 43 engineered features, thresholded target labeling (-1, 0, +1), and chronological train/val/test splits. |
+| 06 | `06_machine_learning.ipynb` | Expanding purged cross-validation, hyperparameter tuning, model evaluation, and artifact export. |
 
-## 🤖 Machine Learning
+---
 
-The machine-learning experiment investigates whether engineered derivatives-market features can help classify the direction of the next observed trading session.
+## 🤖 Machine Learning Integration
 
-### Prediction classes
+The machine learning task is formulated as a 3-class market direction classification problem predicting next-session direction:
 
-| Label | Direction |
-|---:|---|
-| -1 | 🔴 Down |
-| 0 | 🟡 Sideways |
-| 1 | 🟢 Up |
+| Label | Class | Threshold |
+|---:|---|---|
+| **-1** | 🔴 Down | Session return < -0.10% |
+| **0** | 🟡 Sideways | Session return between -0.10% and +0.10% |
+| **+1** | 🟢 Up | Session return > +0.10% |
 
-A threshold of ±0.10% is used to distinguish directional movements from sideways movements.
+### Recorded Test-Set Benchmark (Extra Trees)
 
-### Experimental setup
-
-- 775 labelled observations in the full engineered dataset.
-- 43 predictor features.
-- Chronological training, validation and test partitions.
-- Baseline classifier comparisons.
-- Multiple tree-based and linear classification approaches.
-- Time-aware cross-validation and hyperparameter tuning.
-- Evaluation using Macro F1, Balanced Accuracy, Accuracy and Log Loss.
-
-### Selected model: Extra Trees
-
-**Recorded test-set results**
-
-| Evaluation Metric | Score |
+| Metric | Score |
 |---|---:|
-| Accuracy | 38.46% |
-| Balanced Accuracy | 32.27% |
-| Macro Precision | 32.23% |
-| Macro Recall | 32.27% |
-| Macro F1 | 32.24% |
-| Log Loss | 1.0262 |
+| **Accuracy** | **38.46%** |
+| **Macro F1** | **0.3224** |
+| **Balanced Accuracy** | 32.27% |
+| **Macro Precision** | 32.23% |
+| **Macro Recall** | 32.27% |
+| **Multiclass Log Loss** | 1.0262 |
 
-The test set contained 117 observations, of which the model correctly classified 45.
+### Dataset Partitions
 
-The recorded partition sizes are:
+| Partition | Observation Count | Percentage |
+|---|---:|---:|
+| Training | 541 | 70% |
+| Validation | 115 | 15% |
+| Untouched Test | 117 | 15% |
+| **Partition Total** | **773** | 100% |
 
-| Partition | Observations |
-|---|---:|
-| Training | 541 |
-| Validation | 115 |
-| Test | 117 |
-| **Total in partitions** | **773** |
+*Note on Split Discrepancy:* The full engineered dataset contains 775 observations, while the partitions total 773. Exactly 2 boundary records were purged to eliminate lookahead contamination across temporal boundaries.
 
-The full engineered dataset contains 775 labelled observations, while the reported train, validation and test partitions account for 773. The two-observation difference is retained here transparently rather than assuming a reason that has not been verified.
+---
 
-The results show that predicting market direction from the available features remains challenging. The experiment is exploratory and should not be interpreted as a reliable forecasting or trading system.
+## 🖥️ Web Application Features
+
+The full-stack web application provides an intuitive interface for exploring the research outputs:
+
+1. **Overview Dashboard (`/`):**
+   - High-level scale indicators, trading days, and date span.
+   - Market share breakdown for Volume and Open Interest.
+   - ML experiment summary and data constraint disclosure notices.
+2. **Futures Analytics (`/futures`):**
+   - Area chart of closing price trajectories.
+   - Daily volume bars and Open Interest trendlines.
+   - Interactive date-range filters with financial presets (`All`, `2021-22`, `2023-24`, `2025-26`).
+   - Paginated, sortable contract records table.
+3. **Options Analytics (`/options`):**
+   - Put-Call Ratio (PCR) trajectory comparing OI-based vs. volume-based ratios.
+   - Side-by-side CE vs. PE volume and open interest comparisons.
+   - Strike-price distribution table (top active strikes).
+   - Expiry cycle and cluster breakdown table.
+4. **Comparative Analytics (`/analytics`):**
+   - Full descriptive statistics table (mean, std, quartiles, skewness, kurtosis).
+   - Dynamic Heatmap toggling between Spearman rank and Pearson linear correlation matrices.
+   - Cross-instrument market share allocations.
+5. **Machine Learning & Playground (`/ml`):**
+   - Complete architectural hyperparameters and 3x3 test confusion matrix.
+   - Top 15 features by Gini impurity importance.
+   - **Interactive Live Inference Playground:** loads authentic test/validation vectors and runs real-time inference against the trained model pipeline (`/api/v1/ml/predict`).
+6. **About Page (`/about`):**
+   - Methodology, technology stack, and academic disclaimers.
+
+---
 
 ## 🛠️ Technology Stack
 
-| Category | Technologies |
-|---|---|
-| Programming | Python |
-| Data Processing | Pandas, NumPy |
-| Visualization | Matplotlib, Seaborn, Plotly |
-| Statistical Analysis | SciPy, Statsmodels |
-| Machine Learning | Scikit-learn, XGBoost (optional) |
-| Data Storage | CSV, Parquet, JSON |
-| Development | Jupyter Notebook, VS Code |
-| Version Control | Git, GitHub |
-
-## 📁 Repository Structure
-
 ```text
 nifty50-FnO-eda/
+├── backend/                  # FastAPI REST API
+│   ├── app/
+│   │   ├── api/routes/       # Endpoints: overview, futures, options, analytics, ml, health
+│   │   ├── core/             # Configuration, CORS, error handling
+│   │   ├── schemas/          # Pydantic v2 validation models
+│   │   └── services/         # Data loading, analytics, and ML inference services
+│   ├── tests/                # 30 Pytest integration tests
+│   └── requirements.txt
 │
-├── data/
-│   ├── raw/
-│   │   └── Original NSE datasets
-│   │
-│   ├── processed/
-│   │   └── Cleaned Parquet datasets
-│   │
-│   └── ml/
-│       ├── full_ml_dataset.parquet
-│       ├── train_dataset.parquet
-│       ├── validation_dataset.parquet
-│       ├── test_dataset.parquet
-│       ├── feature_columns.json
-│       └── ml_metadata.json
+├── frontend/                 # Next.js 14 App Router Application
+│   ├── src/
+│   │   ├── app/              # Routes: /, /futures, /options, /analytics, /ml, /about
+│   │   ├── components/       # Layouts, Sidebar, Header, ThemeProvider, UI components
+│   │   └── lib/              # Centralized API client, TypeScript interfaces, utilities
+│   ├── tailwind.config.js    # Financial terminal design system tokens
+│   └── package.json
 │
-├── notebooks/
-│   ├── 01_data_understanding.ipynb
-│   ├── 02_data_cleaning_preprocessing.ipynb
-│   ├── 03_exploratory_data_analysis.ipynb
-│   ├── 04_comparative_statistical_analysis.ipynb
-│   ├── 05_feature_engineering.ipynb
-│   └── 06_machine_learning.ipynb
-│
-├── requirements.txt
-├── .gitignore
-├── LICENSE
-└── README.md
+├── data/                     # Raw, processed Parquet, and ML datasets
+├── models/                   # Serialized Extra Trees pipeline artifacts
+└── notebooks/                # 6 Research Jupyter notebooks
 ```
 
-Some large datasets and generated artifacts may be excluded from Git. The notebooks document the data preparation and export workflow.
+---
 
-## 🚀 Getting Started
+## 🚀 Local Development Setup
 
-### 1. Clone the repository
+### Prerequisites
+- Python 3.10+ (tested with Python 3.11/3.15)
+- Node.js 18+ (tested with Node 20/26)
+- npm 9+
 
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/yashrajzzz/nifty50-FnO-eda.git
 cd nifty50-FnO-eda
 ```
 
-### 2. Create a virtual environment
-
-**macOS / Linux**
-
+### 2. Backend Setup
 ```bash
+# Create and activate Python virtual environment
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install backend dependencies
+pip install -r backend/requirements.txt
+
+# Run backend test suite
+PYTHONPATH=. pytest backend/tests -v
+
+# Start FastAPI backend server
+PYTHONPATH=. uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000
 ```
+Backend Swagger docs: [http://localhost:8000/docs](http://localhost:8000/docs)  
+Health check: [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health)
 
-**Windows PowerShell**
-
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-```
-
-### 3. Install dependencies
-
+### 3. Frontend Setup
+In a separate terminal:
 ```bash
-pip install -r requirements.txt
+cd frontend
+
+# Install Node dependencies
+npm install
+
+# Run type check and lint
+npm run type-check
+npm run lint
+
+# Start Next.js development server
+npm run dev
 ```
-
-For Parquet support, install PyArrow if it is not already included:
-
-```bash
-pip install pyarrow
-```
-
-### 4. Prepare the datasets
-
-Place the original NSE data archives in the expected `data/raw/` directory.
-
-Run the notebooks in numerical order, beginning with:
-
-```text
-01_data_understanding.ipynb
-```
-
-Continue through Notebook 06 to reproduce the analytical and machine-learning workflow.
-
-> The original NSE data archives may need to be obtained separately. Notebook 6 also depends on the processed machine-learning datasets exported by Notebook 5.
-
-## 🖥️ Future Development
-
-The completed notebooks provide the analytical foundation for a possible interactive web application.
-
-**Planned technology stack**
-
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js |
-| Backend | Python + FastAPI |
-| Data Processing | Pandas + NumPy |
-| Data Storage | Parquet |
-| ML Inference | Scikit-learn |
-| Visualization | Interactive charts |
-
-Potential modules include:
-
-- **Market Overview** — Key market statistics and historical trends.
-- **Futures Analytics** — Futures volume, turnover and open-interest analysis.
-- **Options Analytics** — CE/PE comparisons and options-market insights.
-- **Statistical Analytics** — Interactive research visualizations.
-- **ML Predictions** — Historical model inference and classification results.
-- **Model Evaluation** — Model performance, class-wise metrics and feature importance.
-
-These are planned extensions, not currently deployed live-market services. Live predictions would require an appropriate live data source.
-
-## 📌 Project Roadmap
-
-- [x] Data understanding and exploration
-- [x] Data cleaning and preprocessing
-- [x] Exploratory data analysis
-- [x] Comparative statistical analysis
-- [x] Feature engineering
-- [x] Machine-learning experimentation
-- [ ] FastAPI backend development
-- [ ] Next.js frontend development
-- [ ] Interactive dashboard integration
-- [ ] Testing and deployment
-- [ ] Final project documentation
-
-## ⚠️ Limitations
-
-- The supervised-learning dataset contains substantially fewer observations than the original contract-level dataset.
-- The target uses a derivatives-implied underlying-value proxy, not an independently verified official spot-index close series.
-- Class imbalance affects the classification results, particularly the Sideways class.
-- Feature importance does not establish causation.
-- No live NSE data integration or trading backtest is included in the completed research.
-- Transaction costs, slippage, execution constraints and risk-adjusted trading returns have not been evaluated.
-- The model's results are experimental and should not be treated as investment advice or trading recommendations.
-
-## 📚 References
-
-- [National Stock Exchange of India](https://www.nseindia.com/)
-- [NSE Historical F&O Data](https://www.nseindia.com/report-detail/fo_eq_security)
-- [Pandas Documentation](https://pandas.pydata.org/docs/)
-- [Scikit-learn Documentation](https://scikit-learn.org/stable/)
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-<p align="center">
-  <strong>Built with Python, curiosity, and a passion for financial data.</strong>
-  <br/>
-  Educational and research project - Not financial or investment advice.
-</p>
+## 🐳 Docker Deployment Setup
+
+You can run the entire full-stack application with a single command via Docker Compose:
+
+```bash
+docker-compose up --build
+```
+
+- **Frontend:** [http://localhost:3000](http://localhost:3000)
+- **Backend API:** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### Production Hosting Recommendations
+
+| Service | Recommended Platform | Notes |
+|---|---|---|
+| **Frontend** | Vercel / Netlify / Node Container | Set `NEXT_PUBLIC_API_URL` to your production backend URL. |
+| **Backend** | Render / Fly.io / AWS ECS / GCP Cloud Run | Dedicated container with **minimum 1GB RAM** to retain parquet datasets and the Extra Trees joblib pipeline in memory. |
+
+---
+
+## ⚠️ Research Disclaimer & Limitations
+
+- **Educational & Exploratory Tool:** This project is an academic research demonstration. It is not an algorithmic execution engine and does not provide financial or trading advice.
+- **Underlying Value Field:** Represents an options/futures proxy with ~68.26% coverage; it is not verified official cash spot closing data.
+- **No Lookahead Bias:** Feature engineering and cross-validation strictly employ purged walk-forward splits to prevent data leakage.
+- **Market Dynamics:** Derivatives direction prediction with historical end-of-day features is noisy; a 38.46% test accuracy reflects the difficulty of directional forecasting without intraday order flow or macroeconomic factors.
+
+---
+
+## 📄 License & Credits
+
+Built for academic research using public National Stock Exchange of India (NSE) historical reports. Distributed under the MIT License.
