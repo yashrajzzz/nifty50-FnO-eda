@@ -292,5 +292,5 @@ These are planned extensions, not currently deployed live-market services. Live 
 <p align="center">
   <strong>Built with Python, curiosity, and a passion for financial data.</strong>
   <br/>
-  <sub>Educational and research project — Not financial or investment advice.</sub>
+  Educational and research project - Not financial or investment advice.
 </p>
