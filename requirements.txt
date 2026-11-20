@@ -11,8 +11,9 @@ plotly
 scipy
 statsmodels
 
-# Machine learning and preprocessing
+# Machine learning
 scikit-learn
+xgboost==3.4.1
 
 # Jupyter environment
 jupyter
