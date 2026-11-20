@@ -69,6 +69,7 @@ export default function FuturesPage() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleApplyFilter = (newStart: string, newEnd: string) => {
