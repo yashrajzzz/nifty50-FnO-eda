@@ -1,0 +1,57 @@
+/* IntroScreen.css — Financial Terminal & Quantitative Animation Styling */
+
+.intro-screen-container {
+  background-color: #080d16;
+  color: #f8fafc;
+  font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+.intro-terminal-border {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.intro-accent-green {
+  color: #61dca3;
+}
+
+.intro-accent-border {
+  border-color: rgba(97, 220, 163, 0.3);
+}
+
+.intro-pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #61dca3;
+  box-shadow: 0 0 8px rgba(97, 220, 163, 0.8);
+  animation: intro-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes intro-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.intro-progress-bar {
+  background: linear-gradient(90deg, #61dca3, #3b82f6);
+  box-shadow: 0 0 10px rgba(97, 220, 163, 0.5);
+  transition: width 0.3s ease-out;
+}
+
+.intro-scanline {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0, 0, 0, 0.25) 50%,
+    rgba(0, 0, 0, 0.25)
+  );
+  background-size: 100% 4px;
+}
