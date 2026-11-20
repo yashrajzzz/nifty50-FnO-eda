@@ -23,9 +23,10 @@ Thumbs.db
 *.log
 *.tmp
 
-# Processed datasets (keep raw data)
+# Processed datasets (keep raw data and lightweight/clean parquets for low-RAM deployment)
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/*.parquet
 
 # Python packaging
 build/
