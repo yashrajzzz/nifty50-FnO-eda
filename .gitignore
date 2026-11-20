@@ -46,3 +46,5 @@ out/
 backend/.venv/
 frontend/.next/
 *.tsbuildinfo
+frontend/.next/
+*.tsbuildinfo
