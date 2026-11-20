@@ -44,3 +44,5 @@ out/
 
 # Backend virtual environment
 backend/.venv/
+frontend/.next/
+*.tsbuildinfo
