@@ -40,7 +40,9 @@ export default function AnalyticsPage() {
   // Correlation matrix view mode
   const [corrMode, setCorrMode] = useState<"spearman" | "pearson">("spearman");
 
-  useEffect(() => {
+  const loadData = () => {
+    setLoading(true);
+    setError(null);
     Promise.all([
       api.analyticsDescriptive(),
       api.analyticsCorrelation(),
@@ -51,12 +53,17 @@ export default function AnalyticsPage() {
         setCorrelation(corrRes);
         setComparison(compRes);
       })
-      .catch((err) => setError(err.message))
+      .catch((err) => setError(err?.message || "Failed to load comparative analytics"))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
-  if (error) return <ErrorState message={error} />;
-  if (loading || !descriptive || !correlation || !comparison) return <LoadingState />;
+  if (error) return <ErrorState message={error} onRetry={loadData} />;
+  if (loading || !descriptive || !correlation || !comparison)
+    return <LoadingState text="Computing descriptive statistics and correlation matrices…" />;
 
   const descriptiveRows: DescriptiveRow[] = [
     { variable: "Futures Daily Returns (%)", ...descriptive.futures_returns },

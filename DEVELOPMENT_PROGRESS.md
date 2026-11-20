@@ -97,4 +97,31 @@
   - TypeScript check: `npm run type-check --prefix frontend` (0 errors).
   - Production build: `npm run build --prefix frontend` (all 9 routes compiled cleanly).
   - Pytest suite: `pytest backend/tests -v` (30 passed in 1.23s).
+
+---
+
+## Part 7: Full-Stack Integration and Functionality (Completed)
+- **Centralized API Client & Connectivity:**
+  - Standardized client in `frontend/src/lib/api.ts` with configurable base URL (`NEXT_PUBLIC_API_URL` or `NEXT_PUBLIC_API_BASE_URL`).
+  - Added request timeout handling via `AbortController` (15s default) and descriptive network diagnostics.
+  - Added `frontend/.env.example` documenting environment variables.
+  - Verified route path alignment: `/api/v1/ml/sample` endpoint correctly mapped for split-based feature sampling.
+- **Enhanced UI Controls & Error Recovery:**
+  - `DateRangeFilter.tsx`: Added one-click financial date range presets (`All`, `2021-22`, `2023-24`, `2025-26`) tailored to dataset coverage.
+  - `DataTable.tsx`: Enhanced with client-side column sorting (ascending/descending) and full pagination controls.
+  - `ErrorState.tsx`: Added `onRetry` recovery handler across Overview, Futures, Options, Analytics, and ML pages.
+  - `LoadingState.tsx`: Added skeleton loader modes (`kpi`, `chart`, `table`).
+- **Interactive Features Completed:**
+  - Overview: Live re-fetch recovery on failure.
+  - Futures: Dynamic date filtering and 50-row paginated contract table with sortable columns.
+  - Options: Dynamic date filtering, strike limit selection, and expiry cluster table with pagination.
+  - Comparative Analytics: Dynamic toggling between Spearman rank and Pearson linear correlation heatmap.
+  - ML Inference Playground: Dynamic partition sample selection (`TEST`, `VALIDATION`, `TRAIN`) and real-time inference execution against the trained Extra Trees model.
+- **End-to-End Verification:**
+  - Full automated integration test covering all 23 backend API endpoints (100% success rate).
+  - Live prediction test verified with real test feature vectors (200 OK, predicted label and class probabilities).
+  - TypeScript validation: `npm run type-check --prefix frontend` (0 errors).
+  - Production build: `npm run build --prefix frontend` (9 routes statically generated).
+  - Pytest suite: `pytest backend/tests -v` (30 passed in 1.28s).
 - **Known Issues:** None.
+

@@ -112,8 +112,8 @@ export default function FuturesPage() {
     { header: "Settle (₹)", accessorKey: "settle_price", cell: (r) => formatNumber(r.settle_price), align: "right", mono: true },
   ];
 
-  if (error) return <ErrorState message={error} />;
-  if (loading && !summary) return <LoadingState />;
+  if (error) return <ErrorState message={error} onRetry={() => fetchData(startDate, endDate)} />;
+  if (loading && !summary) return <LoadingState text="Loading Futures time-series and summary data…" />;
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">

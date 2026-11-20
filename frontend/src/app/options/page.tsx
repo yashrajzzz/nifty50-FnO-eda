@@ -41,7 +41,10 @@ export default function OptionsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const fetchData = async (start?: string, end?: string) => {
+  const [strikeLimit, setStrikeLimit] = useState(25);
+  const [expiryLimit, setExpiryLimit] = useState(25);
+
+  const fetchData = async (start?: string, end?: string, strikes = strikeLimit, expiries = expiryLimit) => {
     try {
       setLoading(true);
       setError(null);
@@ -50,8 +53,8 @@ export default function OptionsPage() {
       const [sumRes, compRes, strikeRes, expRes] = await Promise.all([
         api.optionsSummary(),
         api.optionsComparison(params),
-        api.optionsStrikeAnalysis({ top_n: 25 }),
-        api.optionsExpiryAnalysis({ limit: 25 }),
+        api.optionsStrikeAnalysis({ top_n: strikes }),
+        api.optionsExpiryAnalysis({ limit: expiries }),
       ]);
 
       setSummary(sumRes);
@@ -72,13 +75,23 @@ export default function OptionsPage() {
   const handleApplyFilter = (newStart: string, newEnd: string) => {
     setStartDate(newStart);
     setEndDate(newEnd);
-    fetchData(newStart, newEnd);
+    fetchData(newStart, newEnd, strikeLimit, expiryLimit);
   };
 
   const handleResetFilter = () => {
     setStartDate("");
     setEndDate("");
-    fetchData();
+    fetchData("", "", strikeLimit, expiryLimit);
+  };
+
+  const handleStrikeLimitChange = (n: number) => {
+    setStrikeLimit(n);
+    fetchData(startDate, endDate, n, expiryLimit);
+  };
+
+  const handleExpiryLimitChange = (n: number) => {
+    setExpiryLimit(n);
+    fetchData(startDate, endDate, strikeLimit, n);
   };
 
   // Downsample comparison series for charts
@@ -111,8 +124,8 @@ export default function OptionsPage() {
     { header: "Unique Strikes", accessorKey: "unique_strikes", cell: (r) => r.unique_strikes, align: "right", mono: true },
   ];
 
-  if (error) return <ErrorState message={error} />;
-  if (loading && !summary) return <LoadingState />;
+  if (error) return <ErrorState message={error} onRetry={() => fetchData(startDate, endDate, strikeLimit, expiryLimit)} />;
+  if (loading && !summary) return <LoadingState text="Loading Options market and strike analytics…" />;
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">

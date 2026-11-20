@@ -47,18 +47,26 @@ interface OverviewData {
 
 export default function OverviewPage() {
   const [data, setData] = useState<OverviewData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadData = () => {
+    setLoading(true);
+    setError(null);
     Promise.all([api.overview(), api.futuresSummary(), api.optionsSummary(), api.comparison()])
       .then(([overview, futures, options, comparison]) =>
         setData({ overview, futures, options, comparison })
       )
-      .catch((e) => setError(e.message));
+      .catch((e) => setError(e?.message || "Failed to load overview data"))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
-  if (error) return <ErrorState message={error} />;
-  if (!data) return <LoadingState />;
+  if (error) return <ErrorState message={error} onRetry={loadData} />;
+  if (loading || !data) return <LoadingState text="Loading overview metrics and market breakdown…" />;
 
   const { overview, futures, options, comparison } = data;
 

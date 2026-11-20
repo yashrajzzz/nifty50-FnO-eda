@@ -44,7 +44,9 @@ export default function MLPage() {
   const [predictResult, setPredictResult] = useState<PredictResponse | null>(null);
   const [predictError, setPredictError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadData = () => {
+    setLoading(true);
+    setError(null);
     Promise.all([
       api.mlModelInfo(),
       api.mlMetrics(),
@@ -59,9 +61,23 @@ export default function MLPage() {
         setHistorical(histRes);
         setSample(sampleRes);
       })
-      .catch((err) => setError(err.message))
+      .catch((err) => setError(err?.message || "Failed to load ML artifacts"))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
+
+  const handleSelectSplit = async (split: "test" | "validation" | "train") => {
+    try {
+      const res = await api.mlSampleFeatures(split);
+      setSample(res);
+      setPredictResult(null);
+    } catch (err: any) {
+      setPredictError(err?.message || `Failed to load sample from ${split} partition`);
+    }
+  };
 
   const handleRunInference = async () => {
     if (!sample) return;
@@ -77,8 +93,9 @@ export default function MLPage() {
     }
   };
 
-  if (error) return <ErrorState message={error} />;
-  if (loading || !modelInfo || !metrics || !featureImportance || !historical) return <LoadingState />;
+  if (error) return <ErrorState message={error} onRetry={loadData} />;
+  if (loading || !modelInfo || !metrics || !featureImportance || !historical)
+    return <LoadingState text="Loading Extra Trees model artifacts and evaluation metrics…" />;
 
   // Top 15 features for bar chart
   const topFeatures = featureImportance.native_importance.slice(0, 15).map((f) => ({
@@ -323,6 +340,25 @@ export default function MLPage() {
             <Play size={13} fill="currentColor" />
             <span>{predictLoading ? "Evaluating…" : "Run Inference"}</span>
           </button>
+        </div>
+
+        <div className="flex items-center gap-2 text-xs">
+          <span className="text-foreground-muted">Load Sample Partition:</span>
+          <div className="inline-flex rounded-md border border-border bg-background-subtle p-0.5">
+            {(["test", "validation", "train"] as const).map((s) => (
+              <button
+                key={s}
+                onClick={() => handleSelectSplit(s)}
+                className={`px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                  sample?.split === s
+                    ? "bg-background-surface text-brand shadow-sm font-semibold"
+                    : "text-foreground-secondary hover:text-foreground"
+                }`}
+              >
+                {s.toUpperCase()}
+              </button>
+            ))}
+          </div>
         </div>
 
         {sample && (
