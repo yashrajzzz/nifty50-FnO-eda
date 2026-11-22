@@ -27,6 +27,7 @@ module.exports = {
         },
         brand: {
           DEFAULT: "var(--brand-accent)",
+          vivid: "var(--brand-vivid)",
           subtle: "var(--brand-subtle)",
         },
         market: {
